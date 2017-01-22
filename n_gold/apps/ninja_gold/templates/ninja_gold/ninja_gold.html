@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ninja Gold</title>
+</head>
+<body>
+    <h1>Welcome to ninja gold</h1>
+    <h1>You have {{ request.session.gold }} gold!</h1>
+    <div id="farm"> {% comment %}THis is for the farm{% endcomment %}
+        <form action="/gold" method="post">
+            {% csrf_token %}
+            <label>Lets farm for gold!</label><br>
+            <label>earn 10-20 gold!</label><br>
+            <input type="hidden" name="gold" value="1">
+            <input type="submit" value="Find Gold">
+        </form>
+    </div><br>
+    <div id="cave"> {% comment %}THis is for the farm{% endcomment %}
+        <form action="/gold" method="post">
+            {% csrf_token %}
+            <label>Lets mine for gold!</label><br>
+            <label>earn 5-10 gold!</label><br>
+            <input type="hidden" name="gold" value="2">
+            <input type="submit" value="Find Gold">
+        </form>
+    </div><br>
+    <div id="house"> {% comment %}THis is for the farm{% endcomment %}
+        <form action="/gold" method="post">
+            {% csrf_token %}
+            <label>Lets do house work!</label><br>
+            <label>earn 2-5 gold!</label><br>
+            <input type="hidden" name="gold" value="3">
+            <input type="submit" value="Find Gold">
+        </form>
+    </div><br>
+    <div id="casino"> {% comment %}This is for the casino{% endcomment %}
+        <form action="/gold" method="post">
+            {% csrf_token %}
+            <label>Lets gamble at the casino!</label><br>
+            <label>plus or minus 0-50 gold</label><br>
+            <input type="hidden" name="gold" value="4">
+            <input type="submit" value="Find Gold">
+        </form>
+
+        <form action="/gold" method="post">
+            {% csrf_token %}
+            <label>Lets gamble at the casino!</label><br>
+            <label>plus or minus 0-50 gold</label><br>
+            <input type="hidden" name="gold" value="4">
+            <input type="submit" value="Find Gold">
+        </form><br><br>
+        <div>
+
+        </div>
+
+    </div>
+</body>
+</html>

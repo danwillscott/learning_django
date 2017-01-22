@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Disappearing Ninjas</title>
+      {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'disappearing_ninjas/css/style.css' %}">
+  <script src="{% static 'disappearing_ninjas/js/main.js' %}" > </script>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    {% if img %}
+        <img src="{{ img }}" />
+    {% endif %}
+
+</body>
+</html>

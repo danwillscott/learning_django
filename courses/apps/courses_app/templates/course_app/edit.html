@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete {{ id }}</title>
+</head>
+<body>
+    <h1>Delete {{ course.name }}?</h1>
+        <h2>Course Name: {{ course.name }}</h2>
+        <h3>Course Description: {{ course.description }}</h3>
+        <form action="/delete">
+            <label><input type="submit" name="delete" value="DELETE"></label>
+        </form>
+        <form action="/">
+            <label><input type="submit" name="NO" value="NO"></label>
+        </form>
+</body>
+</html>

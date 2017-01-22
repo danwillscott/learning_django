@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey</title>
+</head>
+<body>  <h1>You took the survey {{ request.session.count }} times</h1>
+        <h3>Your Name: {{ request.session.user }}</h3>
+        <h3>Your Location: {{ request.session.location }}</h3>
+        <h3>Your Favorite Language:{{ request.session.language }}</h3>
+        <h3>Your comment: <br><br> {{ request.session.comment }}</h3>
+</body>
+</html>

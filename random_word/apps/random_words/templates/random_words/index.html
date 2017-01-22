@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First app page</title>
+</head>
+<body>
+    <h1>Random Word Generator</h1>
+    <h2>This is attempted #{{ request.session.attempt }}</h2>
+        {{ random }}
+    <form action="/new_word" method="POST">
+        {% csrf_token %}
+        <br><br>
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>
