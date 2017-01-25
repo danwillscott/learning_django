@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from . import models
-
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 #
@@ -38,7 +38,7 @@ def index(req):
     #     temp = models.Users.objects.get(id=friend.friend_id)
     #     a_list.append(temp)
     # users = models.Users.objects.filter(id=users)
-    users = models.Friendships.objects.filter(user__id=2)
+    # users = models.Friendships.objects.filter(user__id=2)
     # users = models.Friendships.objects.values('user_id', 'friend_id')
     # for friends in users:
     #     print friends.friend_id
@@ -51,14 +51,18 @@ def index(req):
     #     user_list.append(temp)
     #     print friends.friend_id
     # users = models.Users.objects.filter(id='1')
-    users = models.Users.objects.filter(usersfriend__friend__last_name="Hernandez").distinct()
-    users = models.Users.objects.raw('SELECT * FROM friendships')
+    # users = models.Users.objects.filter(usersfriend__friend__last_name="Hernandez").distinct()
+    # users = models.Users.objects.raw('SELECT * FROM friendships')
     # Add this line!
-
+    try:
+        users = models.Users.objects.get(id=1)
+        print("this worked")
+    except ObjectDoesNotExist:
+        print("no user")
     # users = models.Users.objects.filter(usersfriend__friend__id=2)
     # users = models.Friendships.objects.select_related('friend').filter(user_id=2)  # num 3 part two
-    print (users.query)
-    print (users)
+    # print (users.query)
+    # print (users)
     # print user_list
 
     # print (users)  # TODO find a better way to handle this

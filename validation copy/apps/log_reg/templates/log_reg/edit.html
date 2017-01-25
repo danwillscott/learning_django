@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete {{ id }}</title>
+</head>
+<body>
+    <table>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+    <tr>
+        <th>Email Address</th>
+        <th>Created On</th>
+        <th>Actions</th>
+    </tr>
+        {% for user in users  %}
+         <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.created_at }}</td>
+            <td><a href="/delete/{{ user.id }}">Remove</a></td>
+         </tr>
+
+        {% endfor %}
+    </table>
+    <hr>
+    <a href="/">Return to add page</a>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#  <head>#}
+{#    <meta charset="utf-8">#}
+{#    <title>Friendships</title>#}
+{#  </head>#}
+{#  <body>#}
+{#    <h1> I've got some friends? </h1>#}
+{##}
+{#  </body>#}
+{#</html>#}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Courses</title>
+</head>
+<body>
+    <h1> Enter A Valid Email </h1>
+    {% if pass %} {% endif %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+    <form action="/add" method="post">
+        {% csrf_token %}
+        <label>Email Address <input name="email" type="text" placeholder="Email"></label><br><br>
+        <label><input name="add" type="submit" value="Submit"></label>
+    </form><br><hr><br>
+{#{{users.first_name}} {{users.last_name}}#}
+</body>
+</html>
