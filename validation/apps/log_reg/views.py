@@ -1,13 +1,6 @@
 from django.shortcuts import render, redirect
-from ..log_reg.models import LogInLogOut, Users
+from ..log_reg.models import LogIn, NewUser, IsAdmin
 from django.contrib import messages
-import re
-from django.core.validators import validate_email
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError
-# Create your views here.
-
-#  TODO reverse('admin:app_list', kwargs={'app_label': 'auth'}) must declare kwargs to pass dictionary
 
 
 def index(request):
@@ -16,47 +9,37 @@ def index(request):
     return render(request, 'log_reg/templates/log_reg/index.html')
 
 
-# try:
-#     Users.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
-# except IntegrityError:
-#     messages.warning(request, "User name already in use! Please select a new one")
-#     return redirect('/login')
-# registration_dictionary ={
-#     'first_name': request.POST['first_name'],
-#     'last_name': request.POST['last_name'],
-#     'username': request.POST['username'],
-#     'email': request.POST['email'],
-#     'password': request.POST['password'],
-#     'password_confirm': request.POST['password_confirm'],
-#     'dob_date': request.POST['dob_date'],
-# }
-
-
-def register(request):  # TODO add reg class call and pass back dictionary and save in session
+def register(request):  # TODO loop dictionary and save in session and messages
+    request.session['log_reg'] = 'reg'
     if request.method == 'POST':
-        pass
-    if not validate_email('danwillscott@hotmail.com'):
-        print ('email valid')
-    else:
-        print ('not valid')
+        new_user = NewUser()
+        new_user.set_values(request.POST)
+        new_user.new_user()
+        if new_user.message_dict['truth']:
+            new_user.add_user()
+            if new_user.add_dict['truth']:
+                for key, val in new_user.user_dict.items():
+                    request.session[key] = val
+            else:  # Loop over add_dict to messages to display registration errors
+                for key, val in new_user.add_dict.items():
+                    messages.error(request, val)
+        else:  # Loop message_dict to messages to display registration errors
+            for key, val in new_user.message_dict.items():
+                messages.warning(request, val)
     return redirect('/login')  # TODO make this route go to the other app
 
 
 def user_login(request):
-    request.session.flush()
+    request.session['log_reg'] = 'log'
     if request.method == 'POST':
-        if request.POST['username'] > 0 and request.POST['password']:
-            user_is = LogInLogOut.login_validate(request.POST['username'], request.POST['password'])
-            if user_is['truth']:
-                messages.success(request, user_is['alert'])
-                request.session['first_name'] = user_is['first_name']
-                request.session['last_name'] = user_is['last_name']
-                request.session['username'] = user_is['username']
-                request.session['email'] = user_is['email']
-                request.session['user_id'] = user_is['user_id']
-                return redirect('/login/edit/{}'.format(request.session['username']))
-            else:
-                messages.error(request, user_is['alert'])
+        login_user = LogIn(request.POST['username'], request.POST['password'])
+        login_user.login()
+        if login_user.user_dict['truth']:
+            for key, val in login_user.user_dict.items():
+                request.session[key] = val
+            return redirect('/login/edit/{}'.format(request.session['username']))
+        elif login_user.alert_message['truth']:
+            messages.error(request, login_user.alert_message['alert'])
     return redirect('/login')  # TODO make this route go to the other app
 
 
@@ -68,16 +51,59 @@ def is_logged_in(request):
 
 
 def user_logout(request):
-    request.session.flush()  # This flushes the session effectively removing the user
-    return redirect('/login')  # This takes you back to login page on logout
+    request.session.flush()  # Removing user from session causes complete logout
+    return redirect('/login')  # on logout redirect to login
 
 
-def edit(request, username):  # This allows for editing of the user
+def edit(request, username):
     if 'username' in request.session:
         if request.session['username'] == username:
             print(username)
             return render(request, 'log_reg/templates/log_reg/edit.html')
+        else:
+            request.session.flush()
+            messages.warning(request, "Do not change user ID or USERNAME in url bar! You have been logged out")
+            return redirect('/login')
     else:
         request.session.flush()
-        messages.warning(request, "User did not match the edit page. Please log in again.")
+        request.session['log_reg'] = 'reg'
+        messages.warning(request, "You must be logged in to be on that page!")
         return redirect('/login')
+
+
+#  ***** SLUG FIELD *****
+
+
+# try:
+#     Users.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
+# except IntegrityError:
+#     messages.warning(request, "User name already in use! Please select a new one")
+#     return redirect('/login')
+# d ={
+#     'first_name': request.POST['first_name'],
+#     'last_name': request.POST['last_name'],
+#     'username': request.POST['username'],
+#     'email': request.POST['email'],
+#     'password': request.POST['password'],
+#     'password_confirm': request.POST['password_confirm'],
+#     'dob_date': request.POST['dob_date'],
+# }
+# new_user.new_user()
+# new_user.add_user()
+# print(new_user.user_dict)
+# new_user.set_values(request.POST)
+
+# print (new_user.)
+
+# reverse('admin:app_list', kwargs={'app_label': 'auth'}) must declare kwargs to pass dictionary
+
+# if Users.objects.filter(username='dan').exists():
+#     password_hash = Users.objects.filter(username='dan').values('password')
+#     password_hash = password_hash[0]['password']
+#     validated = bcrypt.hashpw(str('123qweASD'), str(password_hash))
+#     if validated == str(password_hash):
+#         print 'valid'
+# print(the_hash == bcrypt.hashpw('secret', the_hash))
+# print(the_hash)
+# print(salt)
+# print(the_hash.find(salt))
